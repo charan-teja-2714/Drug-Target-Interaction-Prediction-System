@@ -1,0 +1,103 @@
+EXPECTED RESULTS FOR SAMPLE INPUTS
+===================================
+
+Note: Actual predictions depend on your trained models and training data.
+These are general expectations based on known drug-target relationships.
+
+---
+
+EXAMPLE 1: Aspirin + COX Enzyme
+--------------------------------
+Drug: CC(=O)OC1=CC=CC=C1C(=O)O (Aspirin)
+Target: COX enzyme (Cyclooxygenase)
+
+EXPECTED: **INTERACTION** (High Confidence ~70-90%)
+REASON: Aspirin is a well-known COX inhibitor used as anti-inflammatory drug.
+This is a validated drug-target pair.
+
+---
+
+EXAMPLE 2: Caffeine + Adenosine Receptor
+-----------------------------------------
+Drug: CN1C=NC2=C1C(=O)N(C(=O)N2C)C (Caffeine)
+Target: Adenosine receptor
+
+EXPECTED: **INTERACTION** (High Confidence ~70-85%)
+REASON: Caffeine is an adenosine receptor antagonist. This is a known
+pharmacological interaction responsible for caffeine's stimulant effects.
+
+---
+
+EXAMPLE 3: Imatinib + BCR-ABL Kinase
+-------------------------------------
+Drug: CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5
+Target: BCR-ABL tyrosine kinase
+
+EXPECTED: **INTERACTION** (Very High Confidence ~80-95%)
+REASON: Imatinib (Gleevec) is a targeted cancer therapy specifically designed
+to inhibit BCR-ABL kinase. This is a validated clinical drug-target pair.
+
+---
+
+EXAMPLE 4: Metformin + K-Ras Protein
+-------------------------------------
+Drug: CN(C)C(=N)NC(=N)N (Metformin)
+Target: K-Ras GTPase
+
+EXPECTED: **NO INTERACTION** or **LOW CONFIDENCE INTERACTION** (~40-60%)
+REASON: Metformin's primary target is mitochondrial complex I, not K-Ras.
+This is likely a non-interacting pair, though models may show uncertainty.
+
+---
+
+EXAMPLE 5: Warfarin + Vitamin K Epoxide Reductase
+--------------------------------------------------
+Drug: CC(=O)CC(C1=CC=CC=C1)C2=C(C3=CC=CC=C3OC2=O)O (Warfarin)
+Target: VKORC1 (Vitamin K epoxide reductase complex subunit 1)
+
+EXPECTED: **INTERACTION** (High Confidence ~75-90%)
+REASON: Warfarin is an anticoagulant that inhibits vitamin K epoxide reductase.
+This is a well-established drug-target interaction.
+
+---
+
+GENERAL INTERPRETATION GUIDE
+=============================
+
+Confidence Levels:
+- **90-100%**: Very high confidence - strong predicted interaction
+- **70-89%**: High confidence - likely interaction
+- **50-69%**: Moderate confidence - uncertain, needs validation
+- **30-49%**: Low confidence - likely no interaction
+- **0-29%**: Very low confidence - strong prediction of no interaction
+
+Model Performance (from your metrics):
+- Best models: Stacking (88.8% ROC-AUC), LightGBM (88.4%), XGBoost (88.1%)
+- These models should give most reliable predictions
+- Ensemble models (Voting, Stacking) typically more robust
+
+Important Notes:
+1. Predictions are probabilistic, not definitive
+2. Novel drug-target pairs may have uncertain predictions
+3. Models trained on BindingDB data (affinity ≤1000 nM = interaction)
+4. Always validate predictions experimentally for real applications
+5. Different models may give slightly different results
+
+---
+
+BATCH PREDICTION EXPECTED OUTPUT
+=================================
+
+When you upload sample_batch.csv, expect:
+- 3-4 predicted interactions (Examples 1, 2, 3, 5)
+- 1-2 predicted no interactions (Example 4)
+- Processing time: 10-30 seconds for 5 pairs
+- Downloadable CSV with confidence scores for each prediction
+
+Sample Output Format:
+id | prediction      | confidence_no_interaction | confidence_interaction
+1  | Interaction     | 0.15                      | 0.85
+2  | Interaction     | 0.25                      | 0.75
+3  | Interaction     | 0.10                      | 0.90
+4  | No Interaction  | 0.65                      | 0.35
+5  | Interaction     | 0.20                      | 0.80

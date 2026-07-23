@@ -117,7 +117,11 @@ Trains all machine learning models and saves them to disk.
 
 import logging
 import joblib
+import numpy as np
+import time
 from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import VarianceThreshold
+from tqdm import tqdm
 
 from src.config import (
     RANDOM_STATE,
@@ -163,19 +167,45 @@ class ModelTrainer:
             stratify=y
         )
 
+        # --------------------------------------------------
+        # Feature selection: remove zero-variance features
+        # (Morgan/MACCS bits that are constant across the dataset
+        #  carry no information and add noise for SVM/MLP)
+        # --------------------------------------------------
+        selector = VarianceThreshold(threshold=0.0)
+        X_train = selector.fit_transform(X_train)
+        X_test  = selector.transform(X_test)
+        joblib.dump(selector, SAVED_MODELS_DIR / "variance_selector.joblib")
+        self.logger.info(
+            f"Feature selection: kept {X_train.shape[1]} / "
+            f"{selector.n_features_in_} features "
+            f"(removed {selector.n_features_in_ - X_train.shape[1]} zero-variance)"
+        )
+
         models = get_all_models()
         trained_models = {}
+        model_names = list(models.keys())
 
-        for model_name, model in models.items():
-            self.logger.info(f"Training model: {model_name}")
+        print(f"\n  Training {len(model_names)} models on "
+              f"{X_train.shape[0]:,} samples × {X_train.shape[1]:,} features\n")
+
+        pbar = tqdm(model_names, desc="Models", unit="model",
+                    ncols=80, leave=True)
+
+        for model_name in pbar:
+            model = models[model_name]
+            pbar.set_description(f"Training  {model_name:<28}")
 
             try:
+                t0 = time.time()
                 model.fit(X_train, y_train)
+                elapsed = time.time() - t0
 
                 # Save model
                 model_path = SAVED_MODELS_DIR / f"{model_name}_tuned.joblib"
                 joblib.dump(model, model_path)
 
+                pbar.write(f"  ✔  {model_name:<28}  done in {elapsed:6.1f}s")
                 self.logger.info(f"Saved {model_name} to {model_path}")
 
                 trained_models[model_name] = {
@@ -185,7 +215,9 @@ class ModelTrainer:
                 }
 
             except Exception as e:
+                pbar.write(f"  ✘  {model_name:<28}  FAILED: {e}")
                 self.logger.error(f"Failed to train {model_name}: {str(e)}")
 
+        print()
         self.logger.info(f"Training completed for {len(trained_models)} models")
         return trained_models

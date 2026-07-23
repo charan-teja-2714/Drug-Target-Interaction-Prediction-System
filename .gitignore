@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+dti_env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Jupyter & IDEs
+.ipynb_checkpoints/
+*.ipynb
+.vscode/
+.idea/
+.claude/
+catboost_info/
+*.swp
+*.swo
+*~
+
+# Logs & Temp
+*.log
+logs/
+dti_prediction.log
+*.tmp
+*.bak
+.cache/
+transformers_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Data files (large datasets)
+data/raw/
+data/processed/
+*.tsv
+
+# Large model files (>100MB - GitHub limit)
+models/saved_models/*.joblib
+models/saved_models/*.pt
+*.joblib
+*.pt

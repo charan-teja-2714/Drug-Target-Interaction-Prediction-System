@@ -1,0 +1,34 @@
+DTI Prediction - Expected Results for sample_20_inputs.csv
+=======================================================
+Rows 1-10  : Interaction     (drug binds to the protein)
+Rows 11-20 : No Interaction  (drug does NOT bind to the protein)
+
+All 5 top models agree unanimously on every row below:
+  - LightGBM (ROC-AUC 88.4%)
+  - XGBoost  (ROC-AUC 88.1%)
+  - Voting Ensemble (ROC-AUC 88.5%)
+  - Stacking (ROC-AUC 88.8%)
+  - Random Forest (ROC-AUC 87.6%)
+
+ID    Expected           Drug SMILES (first 40 chars)
+------------------------------------------------------------------------
+1     Interaction        COc1cc2CCN(C)Cc2cc1Nc1ncc2ccc(NC3(CC3)C(
+2     Interaction        CC(C)(C)[C@H](N)C(=O)N[C@H]1CN[C@](CCCCB
+3     Interaction        OCCOc1ccc(cc1)-c1cnc(NCc2cccc3OCCc23)n2c
+4     Interaction        Clc1cc(ccc1NC(C1CC1)c1ccccc1)S(=O)(=O)Nc
+5     Interaction        COc1cc(Nc2cc(CO)[nH]n2)nc(n1)N(C)[C@H]1C
+6     Interaction        Cc1c(Cl)cccc1C(=O)NC1(C)CCN(CC1)c1ccc(cn
+7     Interaction        Cc1cccc(n1)-c1nc2[C@@H]3CC[C@@H](C3)n2c1
+8     Interaction        COC(=O)N[C@@H](C(C)C)C(=O)Nc1n[nH]c2cc(N
+9     Interaction        Cc1cc(F)cc(c1)-c1c2C[C@@H]3CC[C@@H](N3C(
+10    Interaction        COc1cc(OC)c(Cl)c(c1Cl)-c1cc2cnc(N[C@@H]3
+11    No Interaction     COc1ccc(CCNC(=O)c2cc3c(nc4ccccn4c3=O)n(C
+12    No Interaction     NC1(CO)CCN(CC1)c1cnc2c(n[nH]c2n1)-c1c(F)
+13    No Interaction     C[C@H](CO)N1C[C@@H](C)[C@@H](CN(C)C(=O)N
+14    No Interaction     Oc1ccc(cc1O)C(=O)c1c(O)c(O)cc(Br)c1Br
+15    No Interaction     CCCCCCOc1ccc(F)c(c1)-c1nnc2c(C)nc3cc(Cl)
+16    No Interaction     COc1ccccc1C(=O)NCc1ccc(cc1)-c1nn(C2CCC3(
+17    No Interaction     COc1cc(cc(C(N)=O)c1O)-n1cnc(Nc2nc(nn3ccc
+18    No Interaction     Cc1ccc2oc(=O)c3cnn(CC(=O)N4CCCCCC4)c3c2c
+19    No Interaction     C[C@](O)(CNC(=O)c1ccc(OC2CC2)c(OC2CC2)c1
+20    No Interaction     CN(C(=O)c1ccccc1)c1ccc2n(CCC(N)=O)c(NC(=
